@@ -21,7 +21,7 @@ const CreatePage = () => {
     // window.alert(JSON.stringify(data));
     createProject.mutate(
       {
-        name: data.repoUrl,
+        name: data.projectName,
         githubUrl: data.repoUrl,
         githubToken: data?.githubToken,
       },
