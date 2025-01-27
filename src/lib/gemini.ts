@@ -1,48 +1,78 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Document } from "@langchain/core/documents";
 
 const genAi = new GoogleGenerativeAI(process.env.GEMINI_API_KEY ?? "");
 const model = genAi.getGenerativeModel({
   model: "gemini-1.5-flash",
 });
 export const aiSummarizeCommit = async (diff: string) => {
-    console.log("aiSUMMARIZE-COMMIT CALLED")
+  console.log("aiSUMMARIZE-COMMIT CALLED");
   const response = await model.generateContent([
     `You are an expert programmer, and you are trying to summarize a git diff.
-    Reminders about the git diff format:
-    For every file, there are a few metadata lines, like (for example):
-    
-    css
-    Copy
-    Edit
-    diff --git a/lib/index.js b/lib/index.js  
-    index aadf691..bfef603 100644  
-    --- a/lib/index.js  
-    +++ b/lib/index.js  
-    This means that lib/index.js was modified in this commit. Note that this is only an example.
-    Then there is a specifier of the lines that were modified.
-    
-    A line starting with + means it was added.
-    A line starting with - means that line was deleted.
-    A line that starts with neither + nor - is code given for context and better understanding.
-    It is not part of the diff.
-    EXAMPLE SUMMARY COMMENTS:
-    
-    * Raised the amount of returned recordings from "10" to "100" [packages/server/recordings_api.ts], [packages/server/constants.ts]
-    * Fixed a typo in the GitHub action name [.github/workflows/gpt-commit-summarizer.yml]
-    * Moved the octokit initialization to a separate file [src/octokit.ts], [src/index.ts]
-    * Added an OpenAI API for completions [packages/utils/apis/openai.ts]
-    * Lowered numeric tolerance for test files
-    Most commits will have fewer comments than this examples list.
-    The last comment does not include the file names because there were more than two relevant files in the hypothetical commit.
-    
-    Do not include parts of the example in your summary.
-    It is given only as an example of appropriate comments.
-    
-    "Please summarise the following diff file: \n\n${diff}.`,
+      Reminders about the git diff format:
+      For every file, there are a few metadata lines, like (for example):
+      
+      css
+      Copy
+      Edit
+      diff --git a/lib/index.js b/lib/index.js  
+      index aadf691..bfef603 100644  
+      --- a/lib/index.js  
+      +++ b/lib/index.js  
+      This means that lib/index.js was modified in this commit. Note that this is only an example.
+      Then there is a specifier of the lines that were modified.
+      
+      A line starting with + means it was added.
+      A line starting with - means that line was deleted.
+      A line that starts with neither + nor - is code given for context and better understanding.
+      It is not part of the diff.
+      EXAMPLE SUMMARY COMMENTS:
+      
+      * Raised the amount of returned recordings from "10" to "100" [packages/server/recordings_api.ts], [packages/server/constants.ts]
+      * Fixed a typo in the GitHub action name [.github/workflows/gpt-commit-summarizer.yml]
+      * Moved the octokit initialization to a separate file [src/octokit.ts], [src/index.ts]
+      * Added an OpenAI API for completions [packages/utils/apis/openai.ts]
+      * Lowered numeric tolerance for test files
+      Most commits will have fewer comments than this examples list.
+      The last comment does not include the file names because there were more than two relevant files in the hypothetical commit.
+      
+      Do not include parts of the example in your summary.
+      It is given only as an example of appropriate comments.
+      
+      "Please summarise the following diff file: \n\n${diff}.`,
   ]);
-  console.log( "Hi => ", response.response.text());
+  // console.log("Hi => ", response.response.text());
   return response.response.text();
 };
+
+export const summarizeCode = async (doc: Document) => {
+  console.log("We are getting the summary for ", doc.metadata.source);
+  try {
+    const code = doc.pageContent.slice(0, 10000);
+    const response = await model.generateContent([
+      `You are an intelligent senior software engineer who specializes in onboarding junior software engineers onto projects.You are onboarding a junior software engineer and explaining to them the purpose of the ${doc.metadata.source} file.
+  Here is the code:
+  ---
+  ${code}
+  ---
+  Give a summary in no more than 100 words of the code above`,
+    ]);
+    return response.response.text();
+  } catch (err) {
+    return "";
+  }
+};
+
+export const generateEmbedding = async (summary: string) => {
+  console.log("generateEmbedd");
+
+  const embeddingModel = genAi.getGenerativeModel({
+    model: "text-embedding-004",
+  });
+  const result = await embeddingModel.embedContent(summary);
+  return result.embedding.values;
+};
+// console.log((await generateEmbeddings("hello world")).length);
 
 // console.log(await aiSummarizeCommit(`diff --git a/api.py b/api.py
 // index f79b5158..37271d96 100644
@@ -50,7 +80,7 @@ export const aiSummarizeCommit = async (diff: string) => {
 // +++ b/api.py
 // @@ -1,6 +1,6 @@
 //  import os
- 
+
 // -from langchain.graphs import Neo4jGraph
 // +from langchain_community.graphs import Neo4jGraph
 //  from dotenv import load_dotenv
@@ -109,7 +139,7 @@ export const aiSummarizeCommit = async (diff: string) => {
 // +
 //  from typing import List, Any
 //  from utils import BaseLogger, extract_title_and_question
- 
+
 // diff --git a/loader.py b/loader.py
 // index 8cc08023..6a620604 100644
 // --- a/loader.py
@@ -156,4 +186,3 @@ export const aiSummarizeCommit = async (diff: string) => {
 // +# missing from the langchain base image?
 // +langchain-openai
 // +langchain-community`));
-

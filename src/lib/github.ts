@@ -58,14 +58,14 @@ export const pollCommits = async (projectId: string) => {
       return summarizeCommit(githubUrl, commit.commitHash);
     }),
   );
+  console.log("Summary Responses ==> ",summaryResponses);
+  
   const summarise = summaryResponses.map((response) => {
     if (response.status === "fulfilled") {
       return response.value as string;
     }
     return "";
   });
-  console.log("summarize ==> ", summarise);
-  
   const commits = await db.commit.createMany({
     data: summarise.map((summary, index) => {
       console.log(`Processing Commint ${index}`);
@@ -80,8 +80,6 @@ export const pollCommits = async (projectId: string) => {
       };
     }),
   });
-
-  //   console.log(unProcessedCommits);[[]]
   return commits;
 };
 
@@ -128,7 +126,14 @@ const summarizeCommit = async (githubUrl: string, commitHash: string) => {
       Accept: "application/vnd.github.v3.diff",
     },
   });
-  return (await aiSummarizeCommit(data)) || "";
+  const response = (await aiSummarizeCommit(data)) || "";
+  console.log(response);
+  return response;
 };
+
+// console.log(await summarizeCommit("https://github.com/docker/genai-stack","caec526d75b821efffc7987d4c12d831ca0498b2"));
+
 // const temp = await pollCommits("cm698f23900004x3nbh7gzh7r");
 // console.log(temp);
+// console.log(await pollCommits("cm6dm8jgi000011kth40aniuz"));
+
