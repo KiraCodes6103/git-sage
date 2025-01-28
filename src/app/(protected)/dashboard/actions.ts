@@ -63,7 +63,7 @@ Answer in markdown syntax, with code snippets if needed. Be as detailed as possi
   })();
   return {
     output: stream.value,
-    fileReferences: result,
+    filesReferences: result,
   };
 };
 // await askQuestion("What is in main.js file?", "cm6ej7tr90036l2pmu6554tjr");
