@@ -17,7 +17,7 @@ export const askQuestion = async (question: string, projectId: string) => {
   SELECT "fileName", "sourceCode", "summary",1-("summaryEmbedding" <=>${vectorQuery}::vector ) AS similarity
   FROM "SourceCodeEmbedding"
   WHERE "projectId" = ${projectId}
-  AND 1-("summaryEmbedding" <=>${vectorQuery}::vector ) > 0.5
+  AND 1-("summaryEmbedding" <=>${vectorQuery}::vector ) > 0.2
   ORDER BY similarity DESC
   LIMIT 10
   `) as { fileName: string; sourceCode: string; summary: string }[];
