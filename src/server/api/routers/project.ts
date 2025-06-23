@@ -2,7 +2,9 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { PrismaClient } from "@prisma/client";
 import { pollCommits } from "@/lib/github";
-import { indexGithubRepo } from "@/lib/github-loader";
+import { checkCredits, indexGithubRepo } from "@/lib/github-loader";
+import { Input } from "postcss";
+import { error } from "console";
 
 export const projectRouter = createTRPCRouter({
   createProject: protectedProcedure
@@ -15,7 +17,18 @@ export const projectRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       //   console.log("ctx-DB", ctx.db.);
-
+      const user = await ctx.db.user.findUnique({
+        where: { id: ctx.user.userId! },
+        select: { credits: true },
+      });
+      if (!user) {
+        throw new Error("User Not Found");
+      }
+      const currentCredits = user.credits || 0;
+      const fileCount = await checkCredits(input.githubUrl, input.githubToken);
+      if (currentCredits < fileCount) {
+        throw new Error("Insufficient Credit");
+      }
       const project = await ctx.db.project.create({
         data: {
           githubUrl: input.githubUrl,
@@ -30,6 +43,10 @@ export const projectRouter = createTRPCRouter({
       // console.log(project);
       await pollCommits(project.id);
       await indexGithubRepo(project.id, input.githubUrl, input.githubToken);
+      await ctx.db.user.update({
+        where: { id: ctx.user.userId! },
+        data: { credits: { decrement: fileCount } },
+      });
       return project;
     }),
   getProjects: protectedProcedure.query(async ({ ctx }) => {
@@ -138,4 +155,19 @@ export const projectRouter = createTRPCRouter({
       },
     });
   }),
+  checkCredits: protectedProcedure
+    .input(
+      z.object({
+        githubUrl: z.string(),
+        githubToken: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const fileCount = await checkCredits(input.githubUrl, input.githubToken);
+      const userCredit = await ctx.db.user.findUnique({
+        where: { id: ctx.user.userId! },
+        select: { credits: true },
+      });
+      return { fileCount, userCredits: userCredit?.credits || 0 };
+    }),
 });

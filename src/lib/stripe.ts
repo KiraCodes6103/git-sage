@@ -7,9 +7,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-01-27.acacia",
 });
 
-export const createCheckoutSession = async (credits: number) => {
-  const successUrl = `${process.env.NEXT_PUBLIC_APP_URL}create`;
-  const cancelUrl = `${process.env.NEXT_PUBLIC_APP_URL}dashboard`;
+export async function createCheckoutSession(credits:number) {
+  const successUrl = `${process.env.NEXT_PUBLIC_APP_URL}/create`;
+  const cancelUrl = `${process.env.NEXT_PUBLIC_APP_URL}/billing`;
 
   const { userId } = await auth();
   if (!userId) {

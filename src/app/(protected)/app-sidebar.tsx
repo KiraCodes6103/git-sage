@@ -15,17 +15,12 @@ import {
 } from "@/components/ui/sidebar";
 import useProject from "@/hooks/use-project";
 import { cn } from "@/lib/utils";
-import {
-  Bot,
-  CreditCard,
-  LayoutDashboard,
-  Plus,
-  Presentation,
-} from "lucide-react";
+import { Bot, CreditCard, LayoutDashboard, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { motion } from "framer-motion";
 const items = [
   {
     title: "Dashboard",
@@ -36,11 +31,6 @@ const items = [
     title: "Q&A",
     url: "/qa",
     icon: Bot,
-  },
-  {
-    title: "Meetings",
-    url: "/meeting",
-    icon: Presentation,
   },
   {
     title: "Billing",
@@ -71,16 +61,18 @@ export const AppSidebar = () => {
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <Link
-                        href={item.url}
-                        className={cn({
-                          "!bg-primary !text-white": pathName === item.url,
-                        })}
-                      >
-                        {/* cn => conditional class addition where keys are the class and value is the condition */}
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
+                      {/* <motion.div whileTap={{ scale: 0.97 }} className="w-full"> */}
+                        <Link
+                          href={item.url}
+                          className={cn({
+                            "!bg-primary !text-white": pathName === item.url,
+                          })}
+                        >
+                          {/* cn => conditional class addition where keys are the class and value is the condition */}
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </Link>
+                      {/* </motion.div> */}
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 );

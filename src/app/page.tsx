@@ -1,6 +1,12 @@
-import { Button } from "@/components/ui/button";
+"use client"
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const Home = async () =>{
-  return <Button>Click Me</Button>
+  const router = useRouter();
+  useEffect(()=>{
+    router.push("/create");
+  },[router]);
+  return <></>
 }
 export default Home;

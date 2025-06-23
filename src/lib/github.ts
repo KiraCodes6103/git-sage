@@ -8,7 +8,7 @@ export const octokit = new Octokit({
 });
 
 // For testing
-const githubUrl = "https://github.com/docker/genai-stack";
+// const githubUrl = "https://github.com/docker/genai-stack";
 
 // Response dataType
 type Response = {
