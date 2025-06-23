@@ -1,29 +1,80 @@
-# Create T3 App
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+# 🚀 Git Sage – AI-Powered GitHub Management  
 
-## What's next? How do I make an app with this?
+**Git Sage** is your smart companion for managing GitHub repositories, summarizing meetings, and streamlining collaboration with AI-powered insights – all wrapped in a **stunning UI**.  
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+🌟 **Sleek & Intuitive UI**  
+🔹 **AI-Powered Commit & Code Summaries**   
+🔹 **Collaborate with Team Members**  
+🔹 **Seamless Stripe Payments for AI Features**  
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+---
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+## ✨ Features  
 
-## Learn More
+✅ **📂 GitHub Repository Insights** – View commits, summaries, and search code effortlessly.   
+✅ **💡 Stunning UI** – Built with **ShadCN + Tailwind CSS** for a smooth user experience.  
+✅ **🔑 Secure Authentication** – Manage users with **Clerk authentication**.  
+✅ **💳 Stripe-Powered Payments** – Buy AI credits to unlock premium features.  
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+---
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+## 🛠️ Tech Stack  
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+| Category         | Technology |
+|----------------|------------|
+| **Frontend**   | Next.js, Tailwind CSS, ShadCN |
+| **Backend**    | tRPC, Firebase |
+| **AI & NLP**   | Google Gemini, Assembly AI |
+| **Database**   | Prisma DB (Neon Console & Drizzle) |
+| **Auth**       | Clerk |
+| **Payments**   | Stripe |
+| **Runtime**    | Bun |
 
-## How do I deploy this?
+---
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## 🚀 Installation  
+
+1️⃣ Clone the repo:  
+```bash
+git clone https://github.com/KiraCodes6103/git-sage.git
+cd git-sage
+```
+2️⃣ Install dependencies using **Bun**:  
+```bash
+bun install
+```
+3️⃣ Set up environment variables in `.env`:  
+```
+NEXT_PUBLIC_GITHUB_API_KEY=your_api_key
+NEXT_PUBLIC_STRIPE_KEY=your_stripe_key
+... (other env variables)
+```
+4️⃣ Run the app:  
+```bash
+bun dev
+```
+
+---
+
+## 📸 Screenshots  
+![image](https://github.com/user-attachments/assets/f38125f0-352b-4ef5-aa0f-1c9ceb7319ce)
+![image](https://github.com/user-attachments/assets/e71ce51a-18a4-4c23-8055-f11300f4d1a3)
+![image](https://github.com/user-attachments/assets/9e716c6c-8b84-4677-85d0-f942a20812fb)
+![image](https://github.com/user-attachments/assets/515951f8-9f41-4793-b395-850327922894)
+![image](https://github.com/user-attachments/assets/c98ec93d-0c9e-4fc2-ae6e-b6fe12f9ef82)
+![image](https://github.com/user-attachments/assets/8e69f1c8-fc36-41ab-bd17-fdc5f94d77bb)
+
+
+---
+
+## 🛡️ License  
+This project is licensed under the **KiraCodes**.  
+ 
+
+---
+
+## 📬 Contact  
+For questions or suggestions, reach out via [LinkedIn/Twitter/Email].  
+
+---
